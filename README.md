@@ -16,7 +16,18 @@ All you really have to do to create your own awesome daemon is edit interface.th
 
 ## Dependencies
 
-- Apache Thrift
+- Apache Thrift. I compiled from scratch and then ran ldconfig. Thrift requires Bit::Vector (libbit-vector-perl) in order to get PERL bindings but neglects to mention it
+- MySQL Connector/C++ (the debian package is called libmysqlcppconn-dev)
 - Boost and Boost Thread (libboost-dev, libboost-thread-dev)
-- MySQL "Connection/C++" lib
+
+## Installation
+
+- Install typical build packages, e.g., 'apt-get build-essential'.  
+- Install thrift.  I found it helpful to ./configure --without-ruby .  Make sure you have C++ and PERL bindings at least.  Thrift lists the Deb packages it needs... add libbit-vector-perl to the list
+- Install the MySQL Connector/C++ dev lib
+- Run make 
+- Copy muled.cfg.sample to muled.cfg and tweak as necessary
+- Run ./muled -d to test, or ./muled to daemonize.  Daemon logs to syslog LOG_DAEMON facility.
+- In a different window, run the PERL example_client.pl program to connect and test
+
 

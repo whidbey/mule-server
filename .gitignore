@@ -3,5 +3,6 @@
 muled
 gen-cpp/
 gen-perl/
+gen-js/
 .thriftgen
 .DS_Store
