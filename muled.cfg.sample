@@ -1,0 +1,15 @@
+[general]
+# basedir="/shared/gua"
+
+[authd]
+pidfile=/var/run/authd.pid
+user=apnsd
+group=apnsd
+ip-port=9090
+worker-threads=16
+
+[mysql]
+username=gua_auth
+password=b$hSm5a2@rT
+server=tcp://127.0.0.1:3306
+poolsize=5
