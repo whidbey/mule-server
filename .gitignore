@@ -1,0 +1,5 @@
+*.o
+*.cfg
+muled
+gen-cpp/
+gen-perl/

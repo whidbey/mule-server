@@ -1,7 +1,7 @@
 
 
-#include "Auth.h"
-#include "AuthHandler.h"
+#include "gen-cpp/Interface.h"
+#include "CustomHandler.h"
 #include <thrift/protocol/TBinaryProtocol.h>
 #include <thrift/server/TNonblockingServer.h>
 #include <thrift/concurrency/PosixThreadFactory.h>
@@ -50,17 +50,17 @@ bool daemonized=false;
 int main(int argc, char **argv) {
 
 	// Read the config file
-	INIReader reader("gua.cfg");
+	INIReader reader("muled.cfg");
 	if (reader.ParseError() < 0) {
-		fatal("Can't read gua.cfg");
+		fatal("Can't read muled.cfg");
 	}
 
 	// Set config parameters
-	int ip_port = reader.GetInteger("authd","ip-port",9090);
-	int worker_threads = reader.GetInteger("authd","worker-threads",16);
-	string user= reader.Get("authd","user","authd");
-	string group= reader.Get("authd","group","authd");
-	string pid_file_name= reader.Get("authd","pidfile","/var/run/authd.pid");
+	int ip_port = reader.GetInteger("muled","ip-port",9090);
+	int worker_threads = reader.GetInteger("muled","worker-threads",16);
+	string user= reader.Get("muled","user","muled");
+	string group= reader.Get("muled","group","muled");
+	string pid_file_name= reader.Get("muled","pidfile","/var/run/muled.pid");
 	string mysql_username=reader.Get("mysql","username","root");
 	string mysql_password=reader.Get("mysql","password","");
 	string mysql_server=reader.Get("mysql","server","tcp://127.0.0.1:3306");
@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
 			fatal("Error daemonizing! Exiting...");
 		}
 		daemonized=true;
-		openlog("authd",0,LOG_AUTH);
+		openlog("muled",0,LOG_DAEMON);
 	}
 
 	// Install signal handlers
@@ -117,8 +117,8 @@ int main(int argc, char **argv) {
 		shared_ptr<MySQLConnectionFactory>mysql_connection_factory(new MySQLConnectionFactory(mysql_server,mysql_username,mysql_password));
 		shared_ptr<ConnectionPool<MySQLConnection> >mysql_pool(new ConnectionPool<MySQLConnection>(mysql_poolsize, mysql_connection_factory));
 
-		shared_ptr<AuthHandler> handler(new AuthHandler(mysql_pool));
-		shared_ptr<TProcessor> processor(new AuthProcessor(handler));
+		shared_ptr<InterfaceHandler> handler(new InterfaceHandler(mysql_pool));
+		shared_ptr<TProcessor> processor(new InterfaceProcessor(handler));
 		shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
 		shared_ptr<ThreadManager> threadManager = ThreadManager::newSimpleThreadManager(worker_threads);
 		shared_ptr<PosixThreadFactory> threadFactory = shared_ptr<PosixThreadFactory>(new PosixThreadFactory());

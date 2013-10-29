@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <memory>
-#include "Auth.h"
+#include "Interface.h"
 #include "connection-pool/MySQLConnection.h"
 
 using boost::shared_ptr;
@@ -13,20 +13,17 @@ extern void log_notice(std::string message);
 namespace active911 {
 
 
-  class AuthHandler : virtual public AuthIf {
-   public:
-	AuthHandler(boost::shared_ptr<ConnectionPool<MySQLConnection> >mysql_pool){
+class InterfaceHandler : virtual public InterfaceIf {
 
+public:
+	InterfaceHandler(boost::shared_ptr<ConnectionPool<MySQLConnection> > mysql_pool) {
+
+  
 	  this->mysql_pool=mysql_pool;
 	};
-	~AuthHandler(){};
 
-	void ping() {
-	  // Your implementation goes here
-	  //printf("ping\n");
-	}
 
-	void authenticate_device(AuthDeviceResult& _return, const std::string& username, const std::string& password){
+  void authenticate_device(AuthDeviceResult& _return, const std::string& username, const std::string& password) {
 
 	  try {
 	  
@@ -34,10 +31,10 @@ namespace active911 {
 		shared_ptr<MySQLConnection> conn=this->mysql_pool->borrow();
 
 		// Run a query
-		conn->sql_connection->setSchema("alert");
-		shared_ptr<sql::PreparedStatement>stmt(conn->sql_connection->prepareStatement("SELECT id FROM devices WHERE id=? AND device_key=?"));
-		stmt->setInt(1,atoi(username.c_str()));
-		stmt->setString(2,password);
+		//conn->sql_connection->setSchema("alert");
+		shared_ptr<sql::PreparedStatement>stmt(conn->sql_connection->prepareStatement("SELECT 1"));
+		//stmt->setInt(1,atoi(username.c_str()));
+		//stmt->setString(2,password);
 		shared_ptr<sql::ResultSet>result(stmt->executeQuery());
 
 		size_t rows=result->rowsCount();      
