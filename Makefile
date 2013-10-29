@@ -5,6 +5,7 @@ DEP_HEAD := CustomHandler.h
 THRIFT_DIR := /usr/local/include/thrift
 
 INC := -I$(THRIFT_DIR) -Igen-cpp/ -Iinclude/ -Iinih/ -Iinih/cpp/ -Iconnection-pool/
+LIB := -L/usr/local/lib 
 
 all: .thriftgen muled
 
@@ -17,7 +18,7 @@ all: .thriftgen muled
 	$(CXX) -Wall -DHAVE_INTTYPES_H -DHAVE_NETINET_IN_H $(INC) -c $< -o $@
 
 muled: muled.o $(GEN_OBJ)
-	$(CXX) $^ -o $@ -L/usr/local/lib -lthrift -lthriftnb -levent -lmysqlcppconn
+	$(CXX) $^ -o $@ $(LIB) -lboost_thread -lthrift -lthriftnb -levent -lmysqlcppconn
 
 clean:
 	$(RM) *.o gen-cpp/*.o inih/*.o inih/cpp/*.o muled .thriftgen

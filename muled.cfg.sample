@@ -1,12 +1,12 @@
 [general]
-# basedir="/shared/gua"
+# basedir="/shared/muled"
 
-[authd]
-pidfile=/var/run/authd.pid
-user=apnsd
-group=apnsd
+[muled]
+pidfile=/var/run/muled.pid
+user=root
+group=root
 ip-port=9090
-worker-threads=16
+worker-threads=5
 
 [mysql]
 username=gua_auth

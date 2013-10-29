@@ -3,3 +3,5 @@
 muled
 gen-cpp/
 gen-perl/
+.thriftgen
+.DS_Store
